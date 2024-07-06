@@ -33,6 +33,7 @@ public class UserController {
         }
         User user = new User();
         BeanUtils.copyProperties(userAddRequest, user);
+        userService.save(user);
         return ResultUtil.success();
     }
 
