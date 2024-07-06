@@ -1,9 +1,13 @@
 package com.cq.oj.controller;
 
+import com.cq.oj.common.ErrorCode;
 import com.cq.oj.common.ResultUtil;
+import com.cq.oj.common.ServiceException;
 import com.cq.oj.model.dto.user.UserAddRequest;
 import com.cq.oj.model.dto.user.UserLoginRequest;
+import com.cq.oj.model.entity.User;
 import com.cq.oj.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,6 +28,11 @@ public class UserController {
 
     @PutMapping
     public ResultUtil addUser(@RequestBody UserAddRequest userAddRequest) {
+        if(null == userAddRequest){
+            throw  new ServiceException(ErrorCode.PARAM_ERROR);
+        }
+        User user = new User();
+        BeanUtils.copyProperties(userAddRequest, user);
         return ResultUtil.success();
     }
 

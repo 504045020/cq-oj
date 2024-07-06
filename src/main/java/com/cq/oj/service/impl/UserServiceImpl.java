@@ -4,11 +4,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cq.oj.common.ErrorCode;
 import com.cq.oj.common.ServiceException;
 import com.cq.oj.mapper.UserMapper;
+import com.cq.oj.model.dto.user.UserAddRequest;
 import com.cq.oj.model.dto.user.UserLoginRequest;
 import com.cq.oj.model.entity.User;
 import com.cq.oj.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
 * @author 50404
@@ -18,6 +21,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService{
+
+    @Resource
+    private  UserMapper userMapper;
+
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public void login(UserLoginRequest userLoginRequest) {
@@ -34,6 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new ServiceException(ErrorCode.PARAM_ERROR,"密码长度不符合要求");
         }
     }
+
 }
 
 

@@ -1,6 +1,7 @@
 package com.cq.oj.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cq.oj.model.dto.user.UserAddRequest;
 import com.cq.oj.model.dto.user.UserLoginRequest;
 import com.cq.oj.model.entity.User;
 
