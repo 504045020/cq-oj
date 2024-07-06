@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: oj-system
+  # 默认 dev 环境
+  profiles:
+    active: dev
+  # 支持 swagger3
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # mysql 数据库配置
   datasource:
     url: jdbc:mysql://129.211.1.222:3306/ojdb?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
