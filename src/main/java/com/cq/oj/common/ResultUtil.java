@@ -32,9 +32,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /**
      * 初始化一个新创建的 AjaxResult 对象
-     *
-     * @param code 状态码
-     * @param msg  返回内容
      */
     public ResultUtil(int code, String msg) {
         super.put(CODE_TAG, code);
@@ -43,10 +40,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /**
      * 初始化一个新创建的 AjaxResult 对象
-     *
-     * @param code 状态码
-     * @param msg  返回内容
-     * @param data 数据对象
      */
     public <T> ResultUtil(int code, String msg, T data) {
         super.put(CODE_TAG, code);
@@ -59,7 +52,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /***
      * 操作成功
-     * @return
      */
     public static ResultUtil success() {
         return ResultUtil.success(ErrorCode.SUCCESS.getMessage());
@@ -68,7 +60,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /***
      * 操作成功
-     * @return
      */
     public static <T>ResultUtil success(T data) {
         return ResultUtil.success(ErrorCode.SUCCESS.getMessage(),data);
@@ -79,10 +70,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /**
      * 返回成功消息
-     *
-     * @param msg  返回内容
-     * @param data 数据对象
-     * @return 成功消息
      */
     public static <T>ResultUtil success(String msg, T data) {
         return new ResultUtil(ErrorCode.SUCCESS.NOT_LOGIN_ERROR.getCode(), msg, data);
@@ -92,7 +79,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /***
      * 操作成功
-     * @return
      */
     public static ResultUtil error() {
         return ResultUtil.success(ErrorCode.OPERATION_ERROR.getMessage(),null);
@@ -100,10 +86,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /**
      * 返回错误消息
-     *
-     * @param msg  返回内容
-     * @param data 数据对象
-     * @return 警告消息
      */
     public static ResultUtil error(String msg, Object data) {
         return new ResultUtil(ErrorCode.OPERATION_ERROR.getCode(), msg, data);
@@ -112,10 +94,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /**
      * 返回错误消息
-     *
-     * @param msg  返回内容
-     * @param data 数据对象
-     * @return 警告消息
      */
     public static ResultUtil error(int code, String message) {
         return new ResultUtil(code, message);
@@ -125,10 +103,6 @@ public class ResultUtil extends HashMap<String,Object> {
 
     /**
      * 返回错误消息
-     *
-     * @param msg  返回内容
-     * @param data 数据对象
-     * @return 警告消息
      */
     public static ResultUtil error(ErrorCode errorCode, String message) {
         return new ResultUtil(errorCode.getCode(), message);
