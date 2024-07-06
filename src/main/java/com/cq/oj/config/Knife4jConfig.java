@@ -1,4 +1,4 @@
-package com.cq.oj.common;
+package com.cq.oj.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
