@@ -62,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //
         // 将用户存信息存入Redis
         LoginUser loginUser = new LoginUser();
-        loginUser.setToken(SALT+);
+        loginUser.setToken(SALT);
         loginUser.setUser(user);
         redisService.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY,System.currentTimeMillis()+ "" +loginUser, 30L, TimeUnit.MINUTES);
 
