@@ -23,8 +23,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResultUtil login(@RequestBody UserLoginRequest userLoginRequest) {
-        userService.login(userLoginRequest);
-        return ResultUtil.success();
+        return ResultUtil.success(userService.login(userLoginRequest));
     }
 
 

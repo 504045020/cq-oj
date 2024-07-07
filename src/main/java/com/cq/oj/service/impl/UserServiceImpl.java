@@ -13,6 +13,7 @@ import com.cq.oj.model.entity.User;
 import com.cq.oj.model.vo.LoginUser;
 import com.cq.oj.service.UserService;
 import com.cq.oj.util.DateUtils;
+import com.cq.oj.util.MD5Util;
 import com.cq.oj.util.RedisService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private RedisService redisService;
 
     @Override
-    public void login(UserLoginRequest userLoginRequest) {
+    public String login(UserLoginRequest userLoginRequest) {
         String userAccount = userLoginRequest.getUserAccount();
         String userPassword = userLoginRequest.getUserPassword();
         if(StringUtils.isAnyBlank(userAccount, userPassword)){
@@ -62,11 +63,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //
         // 将用户存信息存入Redis
         LoginUser loginUser = new LoginUser();
-        loginUser.setToken(SALT);
+        loginUser.setToken(getToken(userAccount));
         loginUser.setUser(user);
-        redisService.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY,System.currentTimeMillis()+ "" +loginUser, 30L, TimeUnit.MINUTES);
-
+        redisService.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY+loginUser.getToken() ,loginUser, 30L, TimeUnit.MINUTES);
+        return loginUser.getToken();
     }
+
+    public String getToken(String userName){
+        return MD5Util.StringInMd5(userName+System.currentTimeMillis());
+    }
+
 
 }
 
