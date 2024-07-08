@@ -18,4 +18,9 @@ public interface CacheConstants {
      * 令牌自定义标识
      */
     public static final String AUTHENTICATION = "Authorization";
+
+    /**
+     * 令牌自定义标识
+     */
+    public static final String BEARER = "Bearer";
 }

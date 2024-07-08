@@ -10,7 +10,9 @@ public class handlerConfig implements WebMvcConfigurer {
     /**
      * 不需要拦截地址
      */
-    public static final String[] EXCLUDE_URLS = {"/user/login",
+    public static final String[] EXCLUDE_URLS = {
+            "/user/login",
+            "/user/register",
             "/swagger-resources/**",
             "/v2/**"};
 
