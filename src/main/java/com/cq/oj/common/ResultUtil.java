@@ -54,7 +54,7 @@ public class ResultUtil extends HashMap<String,Object> {
      * 操作成功
      */
     public static ResultUtil success() {
-        return ResultUtil.success(ErrorCode.SUCCESS.getMessage());
+        return ResultUtil.success(ErrorCode.SUCCESS.getMessage(),null);
     }
 
 
@@ -72,7 +72,7 @@ public class ResultUtil extends HashMap<String,Object> {
      * 返回成功消息
      */
     public static <T>ResultUtil success(String msg, T data) {
-        return new ResultUtil(ErrorCode.SUCCESS.NOT_LOGIN_ERROR.getCode(), msg, data);
+        return new ResultUtil(ErrorCode.NOT_LOGIN_ERROR.getCode(), msg, data);
     }
 
 
