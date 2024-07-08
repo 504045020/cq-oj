@@ -4,16 +4,24 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cq.oj.common.ErrorCode;
 import com.cq.oj.common.ServiceException;
+import com.cq.oj.constant.CacheConstants;
+import com.cq.oj.constant.LoginConstant;
 import com.cq.oj.mapper.UserMapper;
 import com.cq.oj.model.dto.user.UserAddRequest;
 import com.cq.oj.model.dto.user.UserLoginRequest;
 import com.cq.oj.model.entity.User;
+import com.cq.oj.model.vo.LoginUser;
 import com.cq.oj.service.UserService;
+import com.cq.oj.util.DateUtils;
+import com.cq.oj.util.MD5Util;
+import com.cq.oj.util.RedisService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,14 +33,19 @@ import java.util.concurrent.TimeUnit;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService{
 
+    /**
+     * 盐值，混淆密码
+     */
+    private static final String SALT = "chenQi";
+
     @Resource
     private  UserMapper userMapper;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisService redisService;
 
     @Override
-    public void login(UserLoginRequest userLoginRequest) {
+    public String login(UserLoginRequest userLoginRequest) {
         String userAccount = userLoginRequest.getUserAccount();
         String userPassword = userLoginRequest.getUserPassword();
         if(StringUtils.isAnyBlank(userAccount, userPassword)){
@@ -47,10 +60,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 获取用户信息
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .eq(User::getUserAccount, userAccount));
+        //
         // 将用户存信息存入Redis
-        redisTemplate.opsForValue().set(userAccount, user,7L, TimeUnit.HOURS);
-
+        LoginUser loginUser = new LoginUser();
+        loginUser.setToken(getToken(userAccount));
+        loginUser.setUser(user);
+        redisService.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY+loginUser.getToken() ,loginUser, 30L, TimeUnit.MINUTES);
+        return loginUser.getToken();
     }
+
+    public String getToken(String userName){
+        return MD5Util.StringInMd5(userName+System.currentTimeMillis());
+    }
+
 
 }
 

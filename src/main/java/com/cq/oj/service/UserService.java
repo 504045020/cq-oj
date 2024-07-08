@@ -12,6 +12,6 @@ import com.cq.oj.model.entity.User;
 */
 public interface UserService extends IService<User> {
 
-    void login(UserLoginRequest userLoginRequest);
+    String login(UserLoginRequest userLoginRequest);
 
 }
