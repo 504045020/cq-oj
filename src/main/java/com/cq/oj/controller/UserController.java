@@ -74,7 +74,7 @@ public class UserController {
     @PostMapping("/update")
     @AuthCheck(mustRole = AuthConstant.ADMIN_ROLE)
     public ResultUtil updateUser(@RequestBody UserAddRequest userAddRequest){
-
+        return ResultUtil.success();
     }
 
 }
