@@ -3,7 +3,9 @@ package com.cq.oj.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cq.oj.model.dto.user.UserAddRequest;
 import com.cq.oj.model.dto.user.UserLoginRequest;
+import com.cq.oj.model.dto.user.UserRegisterRequest;
 import com.cq.oj.model.entity.User;
+import com.cq.oj.model.vo.LoginUserVo;
 
 /**
 * @author 50404
@@ -12,6 +14,9 @@ import com.cq.oj.model.entity.User;
 */
 public interface UserService extends IService<User> {
 
-    String login(UserLoginRequest userLoginRequest);
+    public int addUser(UserAddRequest userAddRequest);
 
+    LoginUserVo login(UserLoginRequest userLoginRequest);
+
+    long Register(UserRegisterRequest userRegisterRequest);
 }
