@@ -63,15 +63,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 获取用户信息
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .eq(User::getUserAccount, userAccount)
-                .eq(User::getUserPassword,MD5Util.StringInMd5(userPassword+SALT)));
+                .eq(User::getUserPassword,MD5Util.StringInMd5(userPassword + SALT)));
         if(null == user){
-            throw new ServiceException(ErrorCode.PARAM_ERROR,"用户不存在");
+            throw new ServiceException(ErrorCode.PARAM_ERROR,"用户不存在/密码错误");
         }
         // 将用户存信息存入Redis
         LoginUserVo loginUserVo = new LoginUserVo();
         BeanUtils.copyProperties(user, loginUserVo);
         loginUserVo.setToken(getToken(userAccount));
-        redisService.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY+ loginUserVo.getToken() , loginUserVo, 30L, TimeUnit.MINUTES);
+        redisService.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY + loginUserVo.getToken() , loginUserVo, 30L, TimeUnit.MINUTES);
         SecurityContextHolder.set(CacheConstants.LOGIN_TOKEN_KEY, loginUserVo);
         return loginUserVo;
     }
@@ -141,8 +141,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq(StringUtils.isNotBlank(userRole), "userRole", userRole);
         queryWrapper.like(StringUtils.isNotBlank(userProfile), "userProfile", userProfile);
         queryWrapper.like(StringUtils.isNotBlank(userName), "userName", userName);
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
+        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
         return queryWrapper;
     }
 }

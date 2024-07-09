@@ -6,10 +6,7 @@ import com.cq.oj.common.ErrorCode;
 import com.cq.oj.common.ResultUtil;
 import com.cq.oj.common.ServiceException;
 import com.cq.oj.constant.AuthConstant;
-import com.cq.oj.model.dto.user.UserAddRequest;
-import com.cq.oj.model.dto.user.UserLoginRequest;
-import com.cq.oj.model.dto.user.UserQueryRequest;
-import com.cq.oj.model.dto.user.UserRegisterRequest;
+import com.cq.oj.model.dto.user.*;
 import com.cq.oj.model.entity.User;
 import com.cq.oj.model.vo.LoginUserVo;
 import com.cq.oj.service.UserService;
@@ -76,10 +73,17 @@ public class UserController {
         return ResultUtil.success(userService.removeById(id));
     }
 
-
+    @ApiOperation("更新个人信息")
     @PostMapping("/update")
-    @AuthCheck(mustRole = AuthConstant.ADMIN_ROLE)
-    public ResultUtil updateUser(@RequestBody UserAddRequest userAddRequest){
+    public ResultUtil updateUser(@RequestBody UserUpdateRequest userUpdateRequest){
+        if(null == userUpdateRequest){
+            throw  new ServiceException(ErrorCode.PARAM_ERROR);
+        }
+        Long id = SecurityUtils.getUser().getId();
+        User user = new User();
+        BeanUtils.copyProperties(userUpdateRequest,user);
+        user.setId(id);
+        userService.updateById(user);
         return ResultUtil.success();
     }
 
