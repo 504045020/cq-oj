@@ -1,21 +1,25 @@
 package com.cq.oj.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cq.oj.Aop.SecurityContextHolder;
 import com.cq.oj.common.ErrorCode;
 import com.cq.oj.common.ServiceException;
 import com.cq.oj.constant.CacheConstants;
+import com.cq.oj.constant.CommonConstant;
 import com.cq.oj.mapper.UserMapper;
 import com.cq.oj.model.dto.user.UserAddRequest;
 import com.cq.oj.model.dto.user.UserLoginRequest;
+import com.cq.oj.model.dto.user.UserQueryRequest;
 import com.cq.oj.model.dto.user.UserRegisterRequest;
 import com.cq.oj.model.entity.User;
 import com.cq.oj.model.vo.LoginUserVo;
 import com.cq.oj.service.UserService;
 import com.cq.oj.util.MD5Util;
 import com.cq.oj.util.RedisService;
+import com.cq.oj.util.sql.SqlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -117,7 +121,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
     }
 
-
+    @Override
+    public QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
+        if (userQueryRequest == null) {
+            throw new ServiceException(ErrorCode.PARAM_ERROR, "请求参数为空");
+        }
+        Long id = userQueryRequest.getId();
+        String unionId = userQueryRequest.getUnionId();
+        String mpOpenId = userQueryRequest.getMpOpenId();
+        String userName = userQueryRequest.getUserName();
+        String userProfile = userQueryRequest.getUserProfile();
+        String userRole = userQueryRequest.getUserRole();
+        String sortField = userQueryRequest.getSortField();
+        String sortOrder = userQueryRequest.getSortOrder();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(id != null, "id", id);
+        queryWrapper.eq(StringUtils.isNotBlank(unionId), "unionId", unionId);
+        queryWrapper.eq(StringUtils.isNotBlank(mpOpenId), "mpOpenId", mpOpenId);
+        queryWrapper.eq(StringUtils.isNotBlank(userRole), "userRole", userRole);
+        queryWrapper.like(StringUtils.isNotBlank(userProfile), "userProfile", userProfile);
+        queryWrapper.like(StringUtils.isNotBlank(userName), "userName", userName);
+        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
+                sortField);
+        return queryWrapper;
+    }
 }
 
 

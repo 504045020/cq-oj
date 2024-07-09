@@ -1,6 +1,7 @@
 package com.cq.oj.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -62,11 +63,14 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+    @ExcelProperty(value = "更新时间", format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**

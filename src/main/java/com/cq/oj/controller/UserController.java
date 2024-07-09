@@ -1,5 +1,6 @@
 package com.cq.oj.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cq.oj.annotation.AuthCheck;
 import com.cq.oj.common.ErrorCode;
 import com.cq.oj.common.ResultUtil;
@@ -7,6 +8,7 @@ import com.cq.oj.common.ServiceException;
 import com.cq.oj.constant.AuthConstant;
 import com.cq.oj.model.dto.user.UserAddRequest;
 import com.cq.oj.model.dto.user.UserLoginRequest;
+import com.cq.oj.model.dto.user.UserQueryRequest;
 import com.cq.oj.model.dto.user.UserRegisterRequest;
 import com.cq.oj.model.entity.User;
 import com.cq.oj.model.vo.LoginUserVo;
@@ -53,11 +55,15 @@ public class UserController {
         return ResultUtil.success(userService.addUser(userAddRequest));
     }
 
-    @ApiOperation("获取所有用户")
+    @ApiOperation("分页获取所有用户")
     @AuthCheck(mustRole = AuthConstant.ADMIN_ROLE)
-    @GetMapping("/list")
-    public ResultUtil list(){
-        return ResultUtil.success(userService.list());
+    @PostMapping("/list")
+    public ResultUtil list(@RequestBody UserQueryRequest userQueryRequest){
+        long current = userQueryRequest.getCurrent();
+        long pageSize = userQueryRequest.getPageSize();
+        Page<User> page =
+                userService.page(new Page<>(current, pageSize), userService.getQueryWrapper(userQueryRequest));
+        return ResultUtil.success(page);
     }
 
     @ApiOperation("删除用户")
