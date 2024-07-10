@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -52,6 +53,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private RedisService redisService;
 
     @Override
+    public List<User> listUser(UserQueryRequest userQueryRequest) {
+        return null;
+    }
+
+    @Override
     public int addUser(UserAddRequest userAddRequest) {
         User user = new User();
         BeanUtils.copyProperties(userAddRequest, user);
@@ -60,7 +66,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public List<UserVO> listUser(List<User> userList) {
+    public List<UserVO> listUserVo(List<User> userList) {
         if (CollectionUtils.isEmpty(userList)) {
             return new ArrayList<>();
         }
@@ -141,6 +147,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         return userVO;
+    }
+
+    @Override
+    public QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
+        if(null == userQueryRequest){
+            throw new ServiceException(ErrorCode.PARAM_ERROR);
+        }
+        Long id = userQueryRequest.getId();
+        String unionId = userQueryRequest.getUnionId();
+        String mpOpenId = userQueryRequest.getMpOpenId();
+        String userName = userQueryRequest.getUserName();
+        String userProfile = userQueryRequest.getUserProfile();
+        String userRole = userQueryRequest.getUserRole();
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(id !=  null && id != 0 , "id", id);
+        queryWrapper.eq(StringUtils.isNotBlank(unionId), "unionId", unionId);
+        queryWrapper.eq(StringUtils.isNotBlank(mpOpenId), "mpOpenId", mpOpenId);
+        queryWrapper.eq(StringUtils.isNotBlank(userRole), "userRole", userRole);
+        queryWrapper.like(StringUtils.isNotBlank(userProfile), "userProfile", userProfile);
+        queryWrapper.like(StringUtils.isNotBlank(userName), "userName", userName);
+        return queryWrapper;
     }
 }
 

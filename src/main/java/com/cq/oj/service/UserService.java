@@ -19,9 +19,11 @@ import java.util.List;
 */
 public interface UserService extends IService<User> {
 
+    public List<User> listUser(UserQueryRequest userQueryRequest);
+
     public int addUser(UserAddRequest userAddRequest);
 
-    public List<UserVO> listUser(List<User> userList);
+    public List<UserVO> listUserVo(List<User> userList);
 
     LoginUserVo login(UserLoginRequest userLoginRequest);
 
@@ -29,4 +31,6 @@ public interface UserService extends IService<User> {
 
 
     UserVO getUserVO(User user);
+
+    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 }

@@ -1,5 +1,6 @@
 package com.cq.oj.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cq.oj.annotation.AuthCheck;
 import com.cq.oj.common.ErrorCode;
@@ -70,15 +71,15 @@ public class UserController extends BaseController {
     @PostMapping("/list/page")
     public TableDataInfo list(@RequestBody UserQueryRequest userQueryRequest){
         startPage();
-        return getDataTable(userService.list());
+        return getDataTable(userService.list(userService.getQueryWrapper(userQueryRequest)));
     }
 
     @ApiOperation("分页获取所有封装用户信息")
     @PostMapping("/list/page/vo")
     public TableDataInfo listVo(@RequestBody UserQueryRequest userQueryRequest){
         startPage();
-
-        return getDataTable(null);
+        List<User> list = userService.list(userService.getQueryWrapper(userQueryRequest));
+        return getDataTable(userService.listUserVo(list));
     }
 
     @ApiOperation("删除用户")
