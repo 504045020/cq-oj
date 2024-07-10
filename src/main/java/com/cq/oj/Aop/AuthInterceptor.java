@@ -3,16 +3,11 @@ package com.cq.oj.Aop;
 import com.cq.oj.annotation.AuthCheck;
 import com.cq.oj.common.ErrorCode;
 import com.cq.oj.common.ServiceException;
-import com.cq.oj.model.enums.UserRoleEnum;
-import com.cq.oj.service.UserService;
 import com.cq.oj.util.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.util.Objects;
 
 @Aspect
 @Component
