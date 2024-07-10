@@ -9,20 +9,24 @@ import com.cq.oj.constant.AuthConstant;
 import com.cq.oj.model.dto.user.*;
 import com.cq.oj.model.entity.User;
 import com.cq.oj.model.vo.LoginUserVo;
+import com.cq.oj.page.TableDataInfo;
 import com.cq.oj.service.UserService;
 import com.cq.oj.util.MD5Util;
 import com.cq.oj.util.SecurityUtils;
+import com.cq.oj.util.sql.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @Api(tags = "用户管理")
 @RequestMapping("user")
-public class UserController {
+public class UserController extends BaseController {
 
     @Resource
     public UserService userService;
@@ -52,15 +56,29 @@ public class UserController {
         return ResultUtil.success(userService.addUser(userAddRequest));
     }
 
-    @ApiOperation("分页获取所有用户")
+    @ApiOperation("根据id获取用户信息")
     @AuthCheck(mustRole = AuthConstant.ADMIN_ROLE)
-    @PostMapping("/list")
-    public ResultUtil list(@RequestBody UserQueryRequest userQueryRequest){
-        long current = userQueryRequest.getCurrent();
-        long pageSize = userQueryRequest.getPageSize();
-        Page<User> page =
-                userService.page(new Page<>(current, pageSize), userService.getQueryWrapper(userQueryRequest));
-        return ResultUtil.success(page);
+    @PostMapping("/{id}")
+    public ResultUtil list(@PathVariable("id") Long id){
+        User user = userService.getById(id);
+        return ResultUtil.success(userService.getUserVO(user));
+    }
+
+
+    @ApiOperation("分页获取所有完整用户信息,仅管理员")
+    @AuthCheck(mustRole = AuthConstant.ADMIN_ROLE)
+    @PostMapping("/list/page")
+    public TableDataInfo list(@RequestBody UserQueryRequest userQueryRequest){
+        startPage();
+        return getDataTable(userService.list());
+    }
+
+    @ApiOperation("分页获取所有封装用户信息")
+    @PostMapping("/list/page/vo")
+    public TableDataInfo listVo(@RequestBody UserQueryRequest userQueryRequest){
+        startPage();
+
+        return getDataTable(null);
     }
 
     @ApiOperation("删除用户")

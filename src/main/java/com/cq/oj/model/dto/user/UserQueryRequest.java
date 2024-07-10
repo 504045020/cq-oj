@@ -1,14 +1,14 @@
 package com.cq.oj.model.dto.user;
 
-import com.cq.oj.page.PageRequest;
+import com.cq.oj.util.sql.PageDomain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Data
-public class UserQueryRequest extends PageRequest implements Serializable {
+public class UserQueryRequest extends PageDomain implements Serializable {
 
     /**
      * id

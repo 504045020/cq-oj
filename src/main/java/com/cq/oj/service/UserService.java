@@ -8,6 +8,9 @@ import com.cq.oj.model.dto.user.UserQueryRequest;
 import com.cq.oj.model.dto.user.UserRegisterRequest;
 import com.cq.oj.model.entity.User;
 import com.cq.oj.model.vo.LoginUserVo;
+import com.cq.oj.model.vo.UserVO;
+
+import java.util.List;
 
 /**
 * @author 50404
@@ -18,15 +21,12 @@ public interface UserService extends IService<User> {
 
     public int addUser(UserAddRequest userAddRequest);
 
+    public List<UserVO> listUser(List<User> userList);
+
     LoginUserVo login(UserLoginRequest userLoginRequest);
 
     long Register(UserRegisterRequest userRegisterRequest);
 
-    /**
-     * 获取查询条件
-     *
-     * @param userQueryRequest
-     * @return
-     */
-    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    UserVO getUserVO(User user);
 }
