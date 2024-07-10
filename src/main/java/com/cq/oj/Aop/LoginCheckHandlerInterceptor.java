@@ -40,7 +40,7 @@ public class LoginCheckHandlerInterceptor implements HandlerInterceptor {
         LoginUserVo loginUserVo = redisService.getCacheObject(CacheConstants.LOGIN_TOKEN_KEY +replaceTokenPrefix(token));
         if(null != loginUserVo){
             // 刷新过期时间
-            redisService.expire(CacheConstants.LOGIN_TOKEN_KEY + token, CacheConstants.EXPIRATION, TimeUnit.MINUTES);
+            redisService.expire(CacheConstants.LOGIN_TOKEN_KEY + token, CacheConstants.EXPIRATION, TimeUnit.HOURS);
             SecurityContextHolder.set(CacheConstants.LOGIN_TOKEN_KEY, loginUserVo);
         } else {
             response.setStatus(401);
